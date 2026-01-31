@@ -1,81 +1,85 @@
 "use client";
+
 import Button from "@/components/ui/Button";
-import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
+import Image from "next/image";
+
 export default function HeroSection() {
-    const [showBg, setShowBg] = useState(false);
-
-    useEffect(() => {
-        setShowBg(true);
-    }, []);
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.3,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-            },
-        },
-    };
-
     return (
-        <section className="relative flex items-center justify-center min-h-screen w-full bg-[#030303] py-24 px-4">
-            <div
-                className={`animated-glow absolute inset-0 z-0 pointer-events-none${
-                    showBg ? " visible" : ""
-                }`}
-            ></div>
-            <motion.div
-                className="relative z-10 space-y-8 max-w-[80%] w-full flex flex-col items-center justify-center md:block"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-            >
-                <div className="space-y-6">
-                    <motion.h1
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl pt-8 md:pt-0 max-w-3xl text-center md:text-left font-headings font-medium text-white leading-tight tracking-tighter"
-                        variants={itemVariants}
-                    >
-                        Helping Your Business <br />
-                        <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                            Grow{" "}
-                        </span>
-                        Online.
-                    </motion.h1>
-                    <motion.p
-                        className="md:text-xl text-gray-300 text-center md:text-left max-w-xl"
-                        variants={itemVariants}
-                    >
-                        We help small business owners turn their vision into a
-                        stunning, modern website that builds trust with their
-                        audience.
-                    </motion.p>
+        <section className="relative flex items-center justify-center min-h-screen w-full overflow-hidden bg-black text-white">
+            {/* Background Image with Overlay */}
+            <div className="absolute inset-0 z-0 select-none">
+                <Image
+                    src="/homepage/timeless_homepage.png"
+                    alt="Office background"
+                    fill
+                    className="object-cover opacity-60"
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/60 z-10"></div>
+            </div>
+
+            {/* Content Container */}
+            <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 md:px-6 w-full max-w-7xl mx-auto pt-20">
+
+                {/* 5-Star Reviews Badge */}
+                <div className="flex flex-col items-center gap-2 mb-8 animate-fade-in-up">
+                    <div className="flex items-center gap-1">
+                        {/* Google "G" Logo - Simple SVG representation */}
+                        <svg viewBox="0 0 24 24" className="w-6 h-6 mr-1">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4"
+                            />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853"
+                            />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.21.81-.63z"
+                                fill="#FBBC05"
+                            />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335"
+                            />
+                        </svg>
+                        <div className="flex text-[#F4B400]">
+                            {[...Array(5)].map((_, i) => (
+                                <Star key={i} className="w-5 h-5 fill-current" />
+                            ))}
+                        </div>
+                    </div>
+                    <span className="text-white/90 font-medium text-sm tracking-wide">
+                        5-Star Reviews
+                    </span>
                 </div>
 
-                <motion.div variants={itemVariants} className="mt-12  md:mt-24">
-                    <Button
-                        href="/contact"
-                        className="group text-base px-8 py-4"
-                        fullWidth={false}
-                    >
-                        Contact Us
-                        <ArrowRight className="ml-2 w-4 h-4 inline-block group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                </motion.div>
-            </motion.div>
+                {/* Main Headline */}
+                <h1 className="font-headings font-bold text-5xl md:text-7xl leading-[1.1] tracking-tight text-white mb-8 max-w-5xl animate-fade-in-up delay-100">
+                    From Click to Customer,
+                    <br />
+                    We Help You Grow Online.
+                </h1>
+
+                {/* Subheadline */}
+                <p className="text-gray-200 text-lg sm:text-lg md:text-xl max-w-2xl font-normal leading-relaxed mb-12 animate-fade-in-up delay-200">
+                    At Timeless Web, we run your marketing, generate leads, set up your
+                    CRM, track ROI, and train your team creating a complete growth
+                    system that turns clicks into customers.
+                </p>
+
+                {/* CTA Button */}
+                <Button
+                    href="/contact"
+                    fullWidth={false}
+                    className="bg-[#9810fa] hover:bg-[#b02bff] text-white font-bold tracking-wide px-10 py-5 text-lg rounded-sm transition-all shadow-[0_0_20px_rgba(152,16,250,0.5)] hover:shadow-[0_0_30px_rgba(152,16,250,0.7)] animate-fade-in-up"
+                    style={{ animationDelay: '300ms' }}
+                >
+                    Get In Touch
+                </Button>
+
+            </div>
         </section>
     );
 }

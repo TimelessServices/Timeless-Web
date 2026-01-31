@@ -6,13 +6,15 @@ function emailError(email) { return isValidEmail(email) ? null : "Please enter a
 function mobileError(mobile) { return isValidMobile(mobile) ? null : "Please enter a valid Australian phone number"; }
 function subjectError(subject) { return isValidSubject(subject) ? null : "Please select a subject"; }
 function messageError(message) { return isValidMessage(message) ? null : "Message must be at least 10 characters"; }
-  
+
 export function validateForm(form, contactMode = 'email') {
     const errors = {};
 
     const validators = {
-        name: nameError,
-        subject: subjectError,
+        businessName: (name) => name && name.length > 2 ? null : "Business name must be at least 3 characters",
+        firstName: (name) => isValidFullName(name) ? null : "Invalid first name",
+        lastName: (name) => isValidFullName(name) ? null : "Invalid last name",
+        reason: subjectError,
         message: messageError,
         contact: (value) => contactMode === 'email' ? emailError(value) : mobileError(value)
     };

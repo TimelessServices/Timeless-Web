@@ -2,31 +2,31 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
-import FormLabel from "@/components/form/FormLabel";
-import { handleContactFormSubmit } from "@/lib/validation/handleContactForm.js"; // Ensure this import is present
+import { handleContactFormSubmit } from "@/lib/validation/handleContactForm.js";
 
 export default function ContactForm() {
     const router = useRouter();
     const [form, setForm] = useState({
-        name: "",
-        contact: "",
+        businessName: "",
+        firstName: "",
+        lastName: "",
+        contact: "", // This is email
         phone: "",
-        subject: "",
-        websitePackage: "",
-        socialMediaPackage: "",
+        reason: "I'd like to discuss a project",
         message: "",
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
+    const [submitStatus, setSubmitStatus] = useState(null);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setForm((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
 
-        if (submitStatus) {
-            setSubmitStatus(null);
-        }
+        if (submitStatus) setSubmitStatus(null);
     };
 
     const handleSubmit = async (e) => {
@@ -58,32 +58,23 @@ export default function ContactForm() {
             });
 
             if (response.ok) {
-                console.log("✅ Form submitted successfully to Formspark!");
-                router.push("/thank-you"); // Redirect to Thank You page
-
+                router.push("/thank-you");
                 setForm({
-                    name: "",
+                    businessName: "",
+                    firstName: "",
+                    lastName: "",
                     contact: "",
                     phone: "",
-                    subject: "",
-                    websitePackage: "",
-                    socialMediaPackage: "",
+                    reason: "I'd like to discuss a project",
                     message: "",
                 });
             } else {
-                const errorData = await response.json();
-                console.error("❌ Formspark submission error:", errorData);
                 setSubmitStatus({
                     type: "error",
-                    message:
-                        "Submission failed. If the issue persists, please try another browser.",
+                    message: "Submission failed. Please try again.",
                 });
             }
         } catch (error) {
-            console.error(
-                "❌ Network error or other issue during submission:",
-                error
-            );
             setSubmitStatus({
                 type: "error",
                 message: "Network error. Please try again.",
@@ -93,182 +84,150 @@ export default function ContactForm() {
         }
     };
 
-    return (
-        <form
-            id="contact-form"
-            onSubmit={handleSubmit}
-            className="bg-white rounded px-5 py-5 w-full max-w-2xl mx-auto"
-        >
-            {/* Name */}
-            <FormLabel htmlFor="name" label="Full Name" hint="">
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={form.name}
-                    placeholder="Enter your full name"
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                    disabled={isSubmitting}
-                />
-                {submitStatus?.errors?.name && (
-                    <p className="text-red-500 text-xs mt-1">
-                        {submitStatus.errors.name}
-                    </p>
-                )}
-            </FormLabel>
+    // Light Theme Styles
+    const inputClassesLight = "mt-1 block w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition-colors";
+    const labelClassesLight = "block text-sm font-medium text-gray-700 mb-1";
 
-            {/* Email */}
-            <FormLabel htmlFor="contact" label="Email Address" hint="">
-                <div className="relative">
+
+    return (
+        <form id="contact-form" onSubmit={handleSubmit} className="w-full">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b pb-4">Message us</h2>
+
+            <div className="space-y-6">
+                {/* Business Name */}
+                <div>
+                    <label htmlFor="businessName" className={labelClassesLight}>Business name *</label>
                     <input
-                        id="contact"
-                        name="contact"
-                        value={form.contact}
+                        id="businessName"
+                        name="businessName"
+                        type="text"
+                        value={form.businessName}
                         onChange={handleChange}
                         required
-                        type="email"
-                        autoComplete="email"
-                        placeholder="Enter your email"
-                        className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 pr-12"
+                        className={inputClassesLight}
                         disabled={isSubmitting}
                     />
+                    {submitStatus?.errors?.businessName && <p className="text-red-500 text-xs mt-1">{submitStatus.errors.businessName}</p>}
                 </div>
-                {submitStatus?.errors?.contact && (
-                    <p className="text-red-500 text-xs mt-1">
-                        {submitStatus.errors.contact}
-                    </p>
-                )}
-            </FormLabel>
 
-            {/* Phone (optional) */}
-            <FormLabel htmlFor="phone" label="Phone Number (optional)" hint="">
-                <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="Enter your phone number"
-                    className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                    disabled={isSubmitting}
-                />
-            </FormLabel>
+                {/* Name Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label htmlFor="firstName" className={labelClassesLight}>First name *</label>
+                        <input
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            value={form.firstName}
+                            onChange={handleChange}
+                            required
+                            className={inputClassesLight}
+                            disabled={isSubmitting}
+                        />
+                        {submitStatus?.errors?.firstName && <p className="text-red-500 text-xs mt-1">{submitStatus.errors.firstName}</p>}
+                    </div>
+                    <div>
+                        <label htmlFor="lastName" className={labelClassesLight}>Last name *</label>
+                        <input
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            value={form.lastName}
+                            onChange={handleChange}
+                            required
+                            className={inputClassesLight}
+                            disabled={isSubmitting}
+                        />
+                        {submitStatus?.errors?.lastName && <p className="text-red-500 text-xs mt-1">{submitStatus.errors.lastName}</p>}
+                    </div>
+                </div>
 
-            {/* Service Selection */}
-            <FormLabel htmlFor="subject" label="Service Needed" hint="">
-                <select
-                    id="subject"
-                    name="subject"
-                    value={form.subject}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                    disabled={isSubmitting}
-                >
-                    <option value="" disabled>
-                        Select a service
-                    </option>
-                    <option value="web-design">Web Design</option>
-                    <option value="hosting">Hosting</option>
-                    <option value="maintenance">Maintenance</option>
-                    <option value="social-media">
-                        Social Media Management
-                    </option>
-                    <option value="other">Other</option>
-                </select>
-                {submitStatus?.errors?.subject && (
-                    <p className="text-red-500 text-xs mt-1">
-                        {submitStatus.errors.subject}
-                    </p>
-                )}
-            </FormLabel>
+                {/* Email & Phone Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label htmlFor="contact" className={labelClassesLight}>Email *</label>
+                        <input
+                            id="contact"
+                            name="contact"
+                            type="email"
+                            value={form.contact}
+                            onChange={handleChange}
+                            required
+                            className={inputClassesLight}
+                            disabled={isSubmitting}
+                        />
+                        {submitStatus?.errors?.contact && <p className="text-red-500 text-xs mt-1">{submitStatus.errors.contact}</p>}
+                    </div>
+                    <div>
+                        <label htmlFor="phone" className={labelClassesLight}>Phone *</label>
+                        <input
+                            id="phone"
+                            name="phone"
+                            type="tel"
+                            value={form.phone}
+                            onChange={handleChange}
+                            required
+                            className={inputClassesLight}
+                            disabled={isSubmitting}
+                        />
+                    </div>
+                </div>
 
-            {/* Website Package */}
-            {form.subject === "web-design" && (
-                <FormLabel
-                    htmlFor="websitePackage"
-                    label="Website Package"
-                    hint=""
-                >
-                    <select
-                        id="websitePackage"
-                        name="websitePackage"
-                        value={form.websitePackage}
+                {/* Reason for enquiry */}
+                <div>
+                    <label htmlFor="reason" className={labelClassesLight}>Reason for enquiry *</label>
+                    <div className="relative">
+                        <select
+                            id="reason"
+                            name="reason"
+                            value={form.reason}
+                            onChange={handleChange}
+                            required
+                            className={`${inputClassesLight} appearance-none`}
+                            disabled={isSubmitting}
+                        >
+                            <option value="I'd like to discuss a project">I'd like to discuss a project</option>
+                            <option value="Support question">Support question</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Message */}
+                <div>
+                    <label htmlFor="message" className={labelClassesLight}>Message *</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        value={form.message}
                         onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                        rows={6}
+                        required
+                        className={inputClassesLight}
                         disabled={isSubmitting}
-                    >
-                        <option value="" disabled>
-                            Select a package
-                        </option>
-                        <option value="launch">Launch ($149)</option>
-                        <option value="grow">Grow ($249)</option>
-                        <option value="thrive">Thrive ($399)</option>
-                        <option value="scale">Scale ($499+)</option>
-                    </select>
-                </FormLabel>
-            )}
+                    />
+                    {submitStatus?.errors?.message && <p className="text-red-500 text-xs mt-1">{submitStatus.errors.message}</p>}
+                </div>
 
-            {/* Social Media Package */}
-            {form.subject === "social-media" && (
-                <FormLabel
-                    htmlFor="socialMediaPackage"
-                    label="Social Media Package"
-                    hint=""
-                >
-                    <select
-                        id="socialMediaPackage"
-                        name="socialMediaPackage"
-                        value={form.socialMediaPackage}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                {/* Submit Button */}
+                <div className="flex justify-end pt-4">
+                    <Button
+                        type="submit"
                         disabled={isSubmitting}
+                        fullWidth={false}
+                        className="bg-[#9810fa] hover:bg-[#b02bff] text-white rounded-sm px-10 py-4 font-bold tracking-wide text-base transition-all shadow-[0_0_20px_rgba(152,16,250,0.3)] hover:shadow-[0_0_30px_rgba(152,16,250,0.5)]"
                     >
-                        <option value="" disabled>
-                            Select a package
-                        </option>
-                        <option value="starter">Starter ($69/mo)</option>
-                        <option value="growth">Growth ($99/mo)</option>
-                        <option value="pro">Pro ($129/mo)</option>
-                    </select>
-                </FormLabel>
-            )}
+                        {isSubmitting ? "Sending..." : "Submit"}
+                    </Button>
+                </div>
+            </div>
 
-            {/* Message */}
-            <FormLabel htmlFor="message" label="Additional Details" hint="">
-                <textarea
-                    id="message"
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    rows={5}
-                    required
-                    placeholder="Any details we'd need to consider?"
-                    className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                    disabled={isSubmitting}
-                />
-                {submitStatus?.errors?.message && (
-                    <p className="text-red-500 text-xs mt-1">
-                        {submitStatus.errors.message}
-                    </p>
-                )}
-            </FormLabel>
-
-            {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-
-            {/* Status Message */}
-            {submitStatus && (
-                <p
-                    className={`mt-4 text-sm ${submitStatus.type === "success"
-                        ? "text-green-600"
-                        : "text-red-600"
-                        }`}
-                >
+            {submitStatus?.message && (
+                <p className={`mt-4 text-center text-sm ${submitStatus.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
                     {submitStatus.message}
                 </p>
             )}

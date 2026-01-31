@@ -16,7 +16,7 @@ const SmoothScrolling = dynamic(
     }
 );
 
-export default function HomeClient() {  
+export default function HomeClient() {
     return (
         <SmoothScrolling>
             <HeroSection />
