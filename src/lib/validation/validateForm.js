@@ -1,30 +1,70 @@
-import { isValidEmail, isValidMobile, isValidSubject, isValidMessage } from '@/lib/validation/regex.js';
-import { isValidFullName } from '@adz946/true-name';
+import {
+  isValidEmail,
+  isValidMobile,
+  isValidName,
+  isValidBusinessName,
+  isValidSelection,
+  isValidMessage,
+} from "@/lib/validation/regex.js";
 
-function nameError(name) { return isValidFullName(name) ? null : "Please enter a valid name (up to 3 words, no numbers)"; }
-function emailError(email) { return isValidEmail(email) ? null : "Please enter a valid email address"; }
-function mobileError(mobile) { return isValidMobile(mobile) ? null : "Please enter a valid Australian phone number"; }
-function subjectError(subject) { return isValidSubject(subject) ? null : "Please select a subject"; }
-function messageError(message) { return isValidMessage(message) ? null : "Message must be at least 10 characters"; }
+const err = {
+  name: "Please enter a valid name",
+  firstName: "Please enter a valid first name",
+  lastName: "Please enter a valid last name",
+  businessName: "Please enter a valid business name",
+  email: "Please enter a valid email address",
+  mobile: "Please enter a valid Australian mobile number",
+  reason: "Please select a reason",
+  subject: "Please select a subject",
+  message: "Message must be at least 10 characters",
+};
 
-export function validateForm(form, contactMode = 'email') {
-    const errors = {};
+export function validateForm(form) {
+  const errors = {};
+  const has = (k) => Object.prototype.hasOwnProperty.call(form, k);
 
-    const validators = {
-        businessName: (name) => name && name.length > 2 ? null : "Business name must be at least 3 characters",
-        firstName: (name) => isValidFullName(name) ? null : "Invalid first name",
-        lastName: (name) => isValidFullName(name) ? null : "Invalid last name",
-        reason: subjectError,
-        message: messageError,
-        contact: (value) => contactMode === 'email' ? emailError(value) : mobileError(value)
-    };
+  // HeaderForm: name
+  if (has("name")) {
+    if (!isValidName(form.name)) errors.name = err.name;
+  }
 
-    for (const field in form) {
-        const value = form[field];
-        const validator = validators[field];
-        const error = validator ? validator(value) : null;
-        if (error) errors[field] = error;
-    }
+  // ContactForm: businessName / firstName / lastName
+  if (has("businessName")) {
+    if (!isValidBusinessName(form.businessName)) errors.businessName = err.businessName;
+  }
 
-    return errors;
-}  
+  if (has("firstName")) {
+    if (!isValidName(form.firstName)) errors.firstName = err.firstName;
+  }
+
+  if (has("lastName")) {
+    // Allow empty lastName if you want; you can switch this to required later
+    const v = String(form.lastName || "").trim();
+    if (v && !isValidName(v)) errors.lastName = err.lastName;
+  }
+
+  // Shared: email / mobile
+  if (has("email")) {
+    if (!isValidEmail(form.email)) errors.email = err.email;
+  }
+
+  if (has("mobile")) {
+    if (!isValidMobile(form.mobile)) errors.mobile = err.mobile;
+  }
+
+  // ContactForm dropdown: reason (or subject if you later choose that)
+  if (has("reason")) {
+    if (!isValidSelection(form.reason)) errors.reason = err.reason;
+  }
+
+  if (has("subject")) {
+    if (!isValidSelection(form.subject)) errors.subject = err.subject;
+  }
+
+  // Shared: message
+  if (has("message")) {
+    if (!isValidMessage(form.message)) errors.message = err.message;
+  }
+
+  return errors;
+}
