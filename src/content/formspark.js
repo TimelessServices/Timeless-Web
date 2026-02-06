@@ -90,9 +90,18 @@ export function buildContactPayload(raw = {}) {
 }
 
 export async function submitForm(payload) {
-  const res = await fetch("/api/formspark", {
+  const endpoint = process.env.NEXT_PUBLIC_FORMSPARK_ENDPOINT;
+
+  if (!endpoint) {
+    throw new Error("Formspark endpoint is not configured (NEXT_PUBLIC_FORMSPARK_ENDPOINT)");
+  }
+
+  const res = await fetch(endpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
     body: JSON.stringify(payload || {}),
   });
 

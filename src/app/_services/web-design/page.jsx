@@ -3,7 +3,7 @@ import SideBySideSection from "@/components/sections/SideBySideSection";
 import WhyWorkWithUs from "@/components/sections/WhyWorkWithUs";
 import ProcessSection from "@/components/sections/ProcessSection";
 import FAQSection from "@/components/sections/FAQSection";
-import ContactForm from "@/components/form/ContactForm";
+import { ContactForm } from "@/components/form/ContactForm";
 import { Check } from "lucide-react";
 
 export const metadata = {

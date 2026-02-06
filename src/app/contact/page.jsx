@@ -1,4 +1,4 @@
-import ContactForm from "@/components/form/ContactForm";
+import { ContactForm } from "@/components/form/ContactForm";
 import { Mail } from "lucide-react";
 
 export const metadata = { title: "Contact Us | TimelessWeb" };
