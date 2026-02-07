@@ -1,5 +1,5 @@
 /**
- * Split a "name" into first/last. Best-effort.
+ * Split a name into first and last.
  */
 export function splitName(name = "") {
   const parts = String(name).trim().split(/\s+/).filter(Boolean);
@@ -10,7 +10,7 @@ export function splitName(name = "") {
 }
 
 /**
- * Join multiple name parts safely.
+ * Join multiple name parts.
  */
 export function joinName(parts = []) {
   return (Array.isArray(parts) ? parts : [])
@@ -89,15 +89,71 @@ export function buildContactPayload(raw = {}) {
   };
 }
 
+/* -------------------------------------------------------------------------------- */
+
+function ensureHiddenIframe(id = "formspark_hidden_iframe") {
+  let iframe = document.getElementById(id);
+  if (!iframe) {
+    iframe = document.createElement("iframe");
+    iframe.id = id;
+    iframe.name = id;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+  }
+  return iframe;
+}
+
+function postViaHiddenForm(actionUrl, payload, iframeName) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = actionUrl;
+  form.target = iframeName;
+
+  for (const [k, v] of Object.entries(payload || {})) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = k;
+    input.value = v == null ? "" : String(v);
+    form.appendChild(input);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+}
+
 export async function submitForm(payload) {
-  const res = await fetch("/api/formspark", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload || {}),
+  const endpoint = process.env.NEXT_PUBLIC_FORMSPARK_ENDPOINT;
+  if (!endpoint) throw new Error("Missing NEXT_PUBLIC_FORMSPARK_ENDPOINT");
+
+  const iframe = ensureHiddenIframe();
+  const iframeName = iframe.name;
+
+  // Prevent the first load event (about:blank) from resolving incorrectly
+  let resolved = false;
+
+  return await new Promise((resolve, reject) => {
+    const onLoad = () => {
+      if (resolved) return;
+      resolved = true;
+      iframe.removeEventListener("load", onLoad);
+      resolve(true);
+    };
+
+    iframe.addEventListener("load", onLoad);
+
+    try {
+      postViaHiddenForm(endpoint, payload, iframeName);
+
+      setTimeout(() => {
+        if (resolved) return;
+        resolved = true;
+        iframe.removeEventListener("load", onLoad);
+        resolve(true);
+      }, 2500);
+    } catch (e) {
+      iframe.removeEventListener("load", onLoad);
+      reject(e);
+    }
   });
-
-  if (res.ok) return true;
-
-  const data = await res.json().catch(() => ({}));
-  throw new Error(data?.error || "Form submission failed");
 }

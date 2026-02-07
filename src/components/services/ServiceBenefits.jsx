@@ -2,16 +2,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
-  faPaperPlane,
-  faUserCheck,
-  faLaptopCode,
+  faSignsPost, faUserCheck, faDesktop,
+  faGears, faSliders, faArrowUpRightDots,
+  faLocationDot, faRepeat, faCompass,
+  faLayerGroup, faCircleCheck, faListCheck,
+  faBellSlash, faHeadset,
+  faUserCog, faWrench, faPlug
 } from "@fortawesome/free-solid-svg-icons";
 
 // Map string keys from JSON -> actual FontAwesome icon definitions
 const ICON_MAP = {
-  faPaperPlane,
-  faUserCheck,
-  faLaptopCode,
+  faSignsPost, faUserCheck, faDesktop,
+  faGears, faSliders, faArrowUpRightDots,
+  faLocationDot, faRepeat, faCompass,
+  faLayerGroup, faCircleCheck, faListCheck,
+  faBellSlash, faHeadset,
+  faUserCog, faWrench, faPlug
 };
 
 export function ServiceBenefits({ data }) {

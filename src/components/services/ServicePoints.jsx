@@ -2,6 +2,9 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+
 export function ServicePoints({ data, reverse = false, }) {
   if (!data) return null;
   const { title, description, image, items } = data;
@@ -37,19 +40,7 @@ export function ServicePoints({ data, reverse = false, }) {
                   <li key={index} className="flex items-start gap-4">
                     <div className="flex-shrink-0 mt-1">
                       <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <FontAwesomeIcon icon={faCheck} className="w-2 h-2" />
                       </div>
                     </div>
 

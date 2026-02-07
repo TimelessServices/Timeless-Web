@@ -4,6 +4,7 @@ import { ServiceHero } from "@/components/services/ServiceHero";
 import { ServicePoints } from "@/components/services/ServicePoints";
 import { ServiceProcess } from "@/components/services/ServiceProcess";
 import { ServiceBenefits } from "@/components/services/ServiceBenefits";
+import { ServiceAudience } from "@/components/services/ServiceAudience";
 
 import { services } from "@/content/services";
 import { notFound } from "next/navigation";
@@ -32,7 +33,9 @@ export default function ServicePage({ params }) {
       <ServiceHero title={service.hero.title} description={service.hero.description} 
         serviceSlug={params.service} serviceLabel={service.label} />
 
+      <ServiceAudience data={service.audience} />
       <ServicePoints data={service.points} />
+      <ServicePoints data={service.deliverables} reverse={true} />
       <ServiceBenefits data={service.benefits} />
       <ServiceProcess data={service.process} />
       <ServiceFAQ data={service.faq} />
