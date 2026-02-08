@@ -81,44 +81,13 @@ export default function PocketNav({ isScrolled }) {
                     </Button>
 
                     <nav className="flex flex-col gap-6 mt-16 text-lg font-medium">
-                        <Link
-                            href="/"
-                            onClick={handleLinkClick}
-                            className={linkClass("/")}
-                        >
-                            Home
-                        </Link>
-                        <Link
-                            href="/website-packages"
-                            onClick={handleLinkClick}
-                            className={linkClass("/website-packages")}
-                        >
-                            Website Packages
-                        </Link>
-                        <Link
-                            href="/social-media-management-packages"
-                            onClick={handleLinkClick}
-                            className={linkClass(
-                                "/social-media-management-packages"
-                            )}
-                        >
-                            Social Media Management Packages
-                        </Link>
-                        <Link
-                            href="/blog"
-                            onClick={handleLinkClick}
-                            className={linkClass("/blog")}
-                        >
-                            Blog
-                        </Link>
-                        <Button
-                            href="/contact"
-                            variant="primary"
-                            fullWidth={false}
-                            onClick={handleLinkClick}
-                        >
-                            Contact&nbsp;Us
-                        </Button>
+                        <Link href="/" onClick={handleLinkClick} className={linkClass("/")}> Home </Link>
+                        <Link href="/services" onClick={handleLinkClick} className={linkClass("/services")}> Services </Link>
+                        <Link href="/web-packages" onClick={handleLinkClick} className={linkClass("/web-packages")}> Website Packages </Link>
+                        <Link href="/socials-management" onClick={handleLinkClick} className={linkClass("/socials-management")}> Social Media Management </Link>
+                        <Link href="/blog" onClick={handleLinkClick} className={linkClass("/blog")}> Blog </Link>
+                        
+                        <Button href="/contact" variant="primary" fullWidth={false} onClick={handleLinkClick}> Contact&nbsp;Us </Button>
                     </nav>
                 </div>
             </div>

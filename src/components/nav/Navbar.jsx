@@ -35,8 +35,8 @@ export default function Navbar({ isScrolled }) {
                 <div className="flex items-center gap-6">
                     <Link href="/" className={linkClass("/")}> Home </Link>
                     <Link href="/services" className={linkClass("/services")}> Services </Link>
-                    <Link href="/website-packages" className={linkClass("/website-packages")}> Website Packages </Link>
-                    <Link href="/social-media-management-packages" className={linkClass("/social-media-management-packages"
+                    <Link href="/web-packages" className={linkClass("/web-packages")}> Website Packages </Link>
+                    <Link href="/socials-packages" className={linkClass("/socials-packages"
                         )}> Social Media Management </Link>
                     <Link href="/blog" className={linkClass("/blog")}> Blog </Link>
 
