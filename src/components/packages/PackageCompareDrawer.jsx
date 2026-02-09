@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -22,7 +22,7 @@ export function PackageCompareDrawer({ data }) {
 
   if (!data) return null;
 
-  const { tiers = [], featureCatalog = [], compare } = data;
+  const { tiers = [], featureCatalog = [], compare, revisions } = data;
 
   const labelMap = useMemo(
     () => buildFeatureLabelMap(featureCatalog),
@@ -35,19 +35,53 @@ export function PackageCompareDrawer({ data }) {
     return featureCatalog.map((f) => f.id).filter(Boolean);
   }, [compare, featureCatalog]);
 
-  const features = orderedFeatureIds
-    .map((id) => ({ id, label: labelMap[id] }))
-    .filter((f) => f.label);
+  const orderedScopeLabels = useMemo(() => {
+    const explicit = compare?.scopeOrder;
+    if (Array.isArray(explicit) && explicit.length > 0) return explicit;
+
+    const seen = new Set();
+    const labels = [];
+    for (const t of tiers) {
+      for (const s of Array.isArray(t.scope) ? t.scope : []) {
+        if (s?.label && !seen.has(s.label)) {
+          seen.add(s.label);
+          labels.push(s.label);
+        }
+      }
+    }
+    return labels;
+  }, [compare, tiers]);
+
+  const features = useMemo(() => {
+    return orderedFeatureIds
+      .map((id) => ({ id, label: labelMap[id] || id }))
+      .filter((f) => f.id);
+  }, [orderedFeatureIds, labelMap]);
 
   const tierSets = useMemo(() => {
-    return tiers.map((t) => ({
+    return (Array.isArray(tiers) ? tiers : []).map((t) => ({
       id: t.id,
       name: t.name,
       price: t.price,
       includes: new Set(Array.isArray(t.includes) ? t.includes : []),
       scope: Array.isArray(t.scope) ? t.scope : [],
+      badge: t.badge,
     }));
   }, [tiers]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  const labelColClass =
+    "text-sm text-gray-600 w-[140px] sm:w-[160px] lg:w-[220px] shrink-0";
+  const valueClass = "text-sm font-semibold text-gray-900 text-right";
 
   return (
     <section className="bg-white py-10">
@@ -71,19 +105,17 @@ export function PackageCompareDrawer({ data }) {
           ) : null}
         </div>
 
-        {/* Overlay */}
         {open ? (
-          <div
-            role="dialog"
-            aria-modal="true"
-            className="fixed inset-0 z-50"
-          >
+          <div role="dialog" aria-modal="true" className="fixed inset-0 z-50">
             <div
               className="absolute inset-0 bg-black/40"
               onClick={() => setOpen(false)}
             />
 
-            <div className="absolute right-0 top-0 h-full w-full max-w-[720px] bg-white shadow-2xl flex flex-col">
+            <div
+              className="absolute right-0 top-0 h-full w-full max-w-[1100px] bg-white shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
               {/* Header */}
               <div className="p-6 border-b border-gray-100 flex items-start justify-between gap-4">
                 <div>
@@ -109,58 +141,52 @@ export function PackageCompareDrawer({ data }) {
 
               {/* Content */}
               <div className="flex-1 overflow-y-auto">
-                <div className="p-6">
+                <div className="p-6 space-y-10">
                   {/* Scope */}
-                  <div className="mb-8">
+                  <div>
                     <h4 className="text-sm font-semibold text-gray-900 mb-3">
                       Scope
                     </h4>
 
-                    <div className="overflow-x-auto">
-                      <div className="min-w-[680px] rounded-2xl border border-gray-100 overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {tierSets.map((t) => (
                         <div
-                          className="grid bg-gray-50 border-b border-gray-100"
-                          style={{
-                            gridTemplateColumns: `220px repeat(${tierSets.length}, 1fr)`,
-                          }}
+                          key={t.id}
+                          className="rounded-2xl border border-gray-100 overflow-hidden bg-white"
                         >
-                          <div className="p-4 text-sm font-semibold text-gray-700">
-                            Item
-                          </div>
-                          {tierSets.map((t) => (
-                            <div key={t.id} className="p-4 text-sm font-semibold text-gray-900">
-                              <div className="flex items-baseline justify-between gap-2">
-                                <span>{t.name}</span>
-                                <span className="text-purple-700 font-bold">
-                                  {t.price}
-                                </span>
+                          <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-baseline justify-between gap-4">
+                            <div className="min-w-0">
+                              <div className="font-semibold text-gray-900 truncate">
+                                {t.name}
                               </div>
                             </div>
-                          ))}
-                        </div>
-
-                        {["Pages"].map((scopeLabel) => (
-                          <div
-                            key={scopeLabel}
-                            className="grid border-b border-gray-100 last:border-b-0"
-                            style={{
-                              gridTemplateColumns: `220px repeat(${tierSets.length}, 1fr)`,
-                            }}
-                          >
-                            <div className="p-4 text-sm text-gray-700">
-                              {scopeLabel}
+                            <div className="font-bold text-purple-700 shrink-0">
+                              {t.price}
                             </div>
-                            {tierSets.map((t) => {
-                              const found = t.scope.find((s) => s.label === scopeLabel);
-                              return (
-                                <div key={t.id} className="p-4 text-sm text-gray-900 font-semibold">
-                                  {found?.value || "—"}
-                                </div>
-                              );
-                            })}
                           </div>
-                        ))}
-                      </div>
+
+                          <div className="p-4">
+                            <dl className="divide-y divide-gray-100">
+                              {orderedScopeLabels.map((label) => {
+                                const found = t.scope.find(
+                                  (s) => s.label === label
+                                );
+                                return (
+                                  <div
+                                    key={label}
+                                    className="py-3 flex items-start justify-between gap-6"
+                                  >
+                                    <dt className={labelColClass}>{label}</dt>
+                                    <dd className={valueClass}>
+                                      {found?.value || "—"}
+                                    </dd>
+                                  </div>
+                                );
+                              })}
+                            </dl>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
@@ -170,65 +196,68 @@ export function PackageCompareDrawer({ data }) {
                       Capabilities
                     </h4>
 
-                    <div className="overflow-x-auto">
-                      <div className="min-w-[680px] rounded-2xl border border-gray-100 overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {tierSets.map((t) => (
                         <div
-                          className="grid bg-gray-50 border-b border-gray-100"
-                          style={{
-                            gridTemplateColumns: `220px repeat(${tierSets.length}, 1fr)`,
-                          }}
+                          key={t.id}
+                          className="rounded-2xl border border-gray-100 overflow-hidden bg-white"
                         >
-                          <div className="p-4 text-sm font-semibold text-gray-700">
-                            Feature
-                          </div>
-                          {tierSets.map((t) => (
-                            <div key={t.id} className="p-4 text-sm font-semibold text-gray-900">
-                              {t.name}
+                          <div className="p-4 bg-gray-50 border-b border-gray-100 flex items-baseline justify-between gap-4">
+                            <div className="min-w-0">
+                              <div className="font-semibold text-gray-900 truncate">
+                                {t.name}
+                              </div>
                             </div>
-                          ))}
+                            <div className="font-bold text-purple-700 shrink-0">
+                              {t.price}
+                            </div>
+                          </div>
+
+                          <div className="p-4">
+                            <ul className="divide-y divide-gray-100">
+                              {features.map((f) => {
+                                const has = t.includes.has(f.id);
+                                return (
+                                  <li
+                                    key={f.id}
+                                    className="py-3 flex items-center justify-between gap-6"
+                                  >
+                                    <span className="text-sm text-gray-700 min-w-0">
+                                      {f.label}
+                                    </span>
+
+                                    {has ? (
+                                      <span className="w-7 h-7 rounded-full bg-purple-100 text-purple-700 grid place-items-center shrink-0">
+                                        <FontAwesomeIcon
+                                          icon={faCheck}
+                                          className="w-4 h-4"
+                                        />
+                                      </span>
+                                    ) : (
+                                      <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-400 grid place-items-center shrink-0">
+                                        <FontAwesomeIcon
+                                          icon={faMinus}
+                                          className="w-4 h-4"
+                                        />
+                                      </span>
+                                    )}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
                         </div>
-
-                        {features.map((f) => (
-                          <div
-                            key={f.id}
-                            className="grid border-b border-gray-100 last:border-b-0"
-                            style={{
-                              gridTemplateColumns: `220px repeat(${tierSets.length}, 1fr)`,
-                            }}
-                          >
-                            <div className="p-4 text-sm text-gray-700">
-                              {f.label}
-                            </div>
-
-                            {tierSets.map((t) => {
-                              const has = t.includes.has(f.id);
-                              return (
-                                <div key={t.id} className="p-4 grid place-items-center">
-                                  {has ? (
-                                    <span className="w-7 h-7 rounded-full bg-purple-100 text-purple-700 grid place-items-center">
-                                      <FontAwesomeIcon icon={faCheck} className="w-4 h-4" />
-                                    </span>
-                                  ) : (
-                                    <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-400 grid place-items-center">
-                                      <FontAwesomeIcon icon={faMinus} className="w-4 h-4" />
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
+                      ))}
                     </div>
 
                     {/* Revisions note (optional) */}
-                    {data.revisions?.description ? (
+                    {revisions?.description ? (
                       <div className="mt-6 rounded-2xl border border-gray-100 bg-gray-50 p-5">
                         <p className="text-sm font-semibold text-gray-900">
-                          {data.revisions?.title || "How revisions work"}
+                          {revisions?.title || "How revisions work"}
                         </p>
                         <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                          {data.revisions.description}
+                          {revisions.description}
                         </p>
                       </div>
                     ) : null}
