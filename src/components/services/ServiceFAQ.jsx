@@ -1,5 +1,4 @@
 "use client";
-
 import Accordion from "@/components/ui/Accordion";
 
 export function ServiceFAQ({ data }) {

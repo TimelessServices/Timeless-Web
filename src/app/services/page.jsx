@@ -46,7 +46,6 @@ export default function ServicesPage() {
         ))}
       </div>
 
-      {/* One final CTA (optional) */}
       <section className="py-20 bg-slate-50">
         <div className="flex flex-col gap-8 mx-auto px-4 max-w-[1280px]">
           <div>
