@@ -1,8 +1,6 @@
-// src/components/sections/Reviews.jsx
-"use client";
 import { Star } from "lucide-react";
 
-export default function Reviews() {
+export function HomeReviews() {
     return (
         <section className="flex flex-col items-center justify-center py-16 bg-slate-50">
             <div className="w-full max-w-[80%] flex flex-col items-center h-auto">

@@ -14,8 +14,9 @@ export function generateStaticParams() {
   return Object.keys(services).map((service) => ({ service }));
 }
 
-export function generateMetadata({ params }) {
-  const service = services[params.service];
+export async function generateMetadata({ params }) {
+  const { service: serviceKey } = await params;
+  const service = services[serviceKey];
   if (!service) return {};
 
   return {
@@ -24,14 +25,15 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function ServicePage({ params }) {
-  const service = services[params.service];
+export default async function ServicePage({ params }) {
+  const { service: serviceKey } = await params;
+  const service = services[serviceKey];
   if (!service) notFound();
 
   return (
     <main className="w-full">
       <ServiceHero title={service.hero.title} description={service.hero.description} 
-        serviceSlug={params.service} serviceLabel={service.label} />
+        serviceSlug={serviceKey} serviceLabel={service.label} />
 
       <ServiceAudience data={service.audience} />
       <ServicePoints data={service.points} />
@@ -49,7 +51,7 @@ export default function ServicePage({ params }) {
           </div>
 
           <div className="bg-white p-8 rounded-xl border border-gray-100">
-            <ContactForm serviceSlug={params.service} />
+            <ContactForm serviceSlug={serviceKey} />
           </div>
         </div>
       </div>

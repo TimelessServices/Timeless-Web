@@ -1,9 +1,9 @@
-// src/components/sections/OurWork.jsx
 "use client";
+import Button from "../ui/Button";
 import ProjectImage from "../ui/ProjectImage";
-import Button from "../ui/Button"; // Import Button component
+
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react"; // Import ArrowRight for the button
+import { ArrowRight } from "lucide-react";
 
 const projectsComplete = [
     {
@@ -35,7 +35,7 @@ const projectsComplete = [
     },
 ];
 
-export default function OurWork() {
+export function HomeWork() {
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

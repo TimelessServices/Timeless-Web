@@ -1,9 +1,8 @@
-// src/components/sections/Benefits.jsx
 "use client";
-import { AppWindowMac, Cog, GlobeLock } from "lucide-react";
 import { motion } from "framer-motion";
+import { AppWindowMac, Cog, GlobeLock } from "lucide-react";
 
-export default function Benefits() {
+export function HomeBenefits() {
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

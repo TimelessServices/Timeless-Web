@@ -1,7 +1,7 @@
-import { CheckCircle } from "lucide-react"; // Make sure to install and import lucide-react
 import Button from "../ui/Button";
+import { CheckCircle } from "lucide-react";
 
-export default function Explanations() {
+export function HomeExplanations() {
     return (
         <section className="flex flex-col items-center justify-center py-16 md:py-24 ">
             <div className="w-full max-w-[80%] flex flex-col gap-32 h-auto">
