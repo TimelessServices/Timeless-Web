@@ -1,10 +1,8 @@
-"use client";
-
 import Button from "@/components/ui/Button";
 import { Star } from "lucide-react";
 import Image from "next/image";
 
-export default function HeroSection() {
+export function HomeHero() {
     return (
         <section className="relative flex items-center justify-center min-h-screen w-full overflow-hidden bg-black text-white">
             {/* Background Image with Overlay */}

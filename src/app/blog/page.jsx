@@ -1,56 +1,31 @@
-// src/app/blog/page.jsx
-import Link from "next/link";
-import { getSortedPostsData } from "@/lib/posts";
+import { getSortedPostsData, getTagsUsed } from "@/lib/posts";
+import { BlogIndexClient } from "./BlogIndexClient";
 
 export const metadata = {
-    title: "Blog | TimelessWeb",
-    description:
-        "Read our latest articles on web design, business growth, and digital strategy.",
+  title: "Blog | TimelessWeb",
+  description:
+    "Read practical articles on web design, conversion, and small business growth from TimelessWeb.",
 };
 
 export default function BlogIndexPage() {
-    const allPosts = getSortedPostsData();
+  const posts = getSortedPostsData(); // normalized, no content
+  const tagsUsed = getTagsUsed(); // [{ id, label }] filtered to only those used
 
-    return (
-        <div className="bg-white min-h-screen pt-32 pb-16 px-4 md:px-6">
-            <div className="container mx-auto max-w-3xl">
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl font-headings font-bold text-gray-800 mb-3">
-                        The Timeless Web Blog
-                    </h1>
-                    <p className="text-gray-600 text-base">
-                        Practical insights on web design and growing your
-                        business online.
-                    </p>
-                </div>
+  return (
+    <div className="bg-white min-h-screen pt-32 pb-16 px-4 md:px-6">
+      <div className="container mx-auto max-w-5xl">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-headings font-bold text-gray-900">
+            The TimelessWeb Blog
+          </h1>
+          <p className="mt-4 text-gray-600 text-base max-w-[70ch] mx-auto">
+            Practical insights on websites that look professional, build trust,
+            and convert visitors into enquiries.
+          </p>
+        </header>
 
-                <div className="space-y-8">
-                    {allPosts.map(({ id, date, title, excerpt }) => (
-                        <article
-                            key={id}
-                            className="border border-gray-200 rounded-xl p-6 hover:border-purple-300 transition-colors"
-                        >
-                            <h2 className="text-xl font-headings text-purple-700 mb-1">
-                                <Link
-                                    href={`/blog/${id}`}
-                                    className="hover:underline"
-                                >
-                                    {title}
-                                </Link>
-                            </h2>
-                            <time
-                                dateTime={date}
-                                className="block text-sm text-gray-400 mb-3"
-                            >
-                                {date}
-                            </time>
-                            <p className="text-gray-600 text-sm leading-relaxed">
-                                {excerpt}
-                            </p>
-                        </article>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
+        <BlogIndexClient posts={posts} tags={tagsUsed} />
+      </div>
+    </div>
+  );
 }

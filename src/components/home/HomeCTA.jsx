@@ -1,9 +1,7 @@
-// src/components/sections/FinalCTA.jsx
-"use client";
 import Button from "../ui/Button";
 import { ArrowRight } from "lucide-react";
 
-export default function FinalCTA() {
+export function HomeCTA() {
     return (
         <section className="flex flex-col items-center justify-center py-32 bg-stone-900 text-white inset-shadow-sm">
             <div className="w-full max-w-[80%] flex flex-col items-center gap-8 h-auto">

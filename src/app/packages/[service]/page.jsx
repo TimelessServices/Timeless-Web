@@ -13,8 +13,9 @@ export function generateStaticParams() {
     return Object.keys(packages).map((service) => ({ service }));
 }
 
-export function generateMetadata({ params }) {
-    const service = packages[params.service];
+export async function generateMetadata({ params }) {
+    const { service: serviceKey } = await params;
+    const service = packages[serviceKey];
     if (!service) return null;
 
     return {
@@ -23,8 +24,9 @@ export function generateMetadata({ params }) {
     };
 }
 
-export default function PackagePage({ params }) {
-    const service = packages[params.service];
+export default async function PackagePage({ params }) {
+    const { service: serviceKey } = await params;
+    const service = packages[serviceKey];
     if (!service) notFound();
 
     return (
@@ -58,7 +60,9 @@ export default function PackagePage({ params }) {
                         </p>
                     </div>
         
-                    <div className="bg-white p-8 rounded-xl border border-gray-100"> <ContactForm /> </div>
+                    <div className="bg-white p-8 rounded-xl border border-gray-100"> 
+                        <ContactForm serviceSlug={serviceKey} /> 
+                    </div>
                 </div>
             </section>
         </main>

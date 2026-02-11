@@ -1,15 +1,16 @@
 import "@/lib/fontAwesome.js";
 import "@/styles/globals.css";
-import PropTypes from "prop-types";
-import NavWrapper from "@/components/nav/NavWrapper";
-import { Suspense } from "react";
-import FacebookPixelEvents from "@/components/tracking/FacebookPixelEvents";
+
 import Script from "next/script";
+import PropTypes from "prop-types";
+import FacebookPixelEvents from "@/components/tracking/FacebookPixelEvents";
+
+import { Suspense } from "react";
+import { NavHandler } from "@/components/nav/NavHandler";
 
 export const metadata = {
     title: "Timeless Web | Sydney Web Designer",
-    description:
-        "Modern websites that help grow your business. Timeless Web builds high-converting, low-maintenance websites for Sydney-based businesses that want more sales, less admin, and a better brand image.",
+    description: "Modern websites that help grow your business. Timeless Web builds high-converting, low-maintenance websites for Sydney-based businesses that want more sales, less admin, and a better brand image.",
 };
 
 export default function RootLayout({ children }) {
@@ -81,7 +82,7 @@ export default function RootLayout({ children }) {
                 />
             </head>
             <body className="min-h-screen flex flex-col">
-                <NavWrapper />
+                <NavHandler />
                 <main className="flex-grow">{children}</main>
 
                 <footer className="bg-gray-100 w-full">
