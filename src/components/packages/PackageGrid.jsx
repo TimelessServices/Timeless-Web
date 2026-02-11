@@ -31,7 +31,7 @@ export function PackageGrid({ data }) {
   return (
     <section className="bg-white py-16">
       <div className="container mx-auto px-4 max-w-[1280px]">
-        <div className="grid gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-4 items-stretch">
+        <div className="grid gap-4 lg:gap-6 md:grid-cols-2 xl:grid-cols-4 items-stretch">
           {enrichedTiers.map((tier) => (
             <PackageItem key={tier.id || tier.name} data={tier} />
           ))}

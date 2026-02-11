@@ -1,6 +1,6 @@
 export const packages = {
   "web-design": {
-    label: "Web Design",
+    label: "Web Development",
 
     meta: {
       title: "Website Packages | Timeless Web",
@@ -87,7 +87,7 @@ export const packages = {
     ],
 
     compare: {
-      title: "Compare packages",
+      title: "Compare Packages",
       description: "A quick overview of what changes between tiers. Everything listed in “Included With Every Website” applies to every package.",
       scopeOrder: ["Pages"],
       featureOrder: [
@@ -252,7 +252,7 @@ export const packages = {
     ],
 
     compare: {
-        title: "Compare packages",
+        title: "Compare Packages",
         description: "A high-level comparison of what changes between app packages. Everything listed in “Included With Every App” applies to all tiers.",
         scopeOrder: [
             "Application scope",
@@ -453,7 +453,7 @@ export const packages = {
     ],
 
     compare: {
-      title: "Compare plans",
+      title: "Compare Packages",
       description: "A quick overview of what changes between tiers. Everything listed in “Included With Every Plan” applies to every plan.",
       scopeOrder: [
         "Posts / week",
@@ -626,7 +626,7 @@ export const packages = {
     ],
 
     compare: {
-        title: "Compare packages",
+        title: "Compare Packages",
         description: "A simple overview of what changes between branding packages. Everything listed in “Included With Every Branding Package” applies to all tiers.",
         scopeOrder: [
             "Brand scope",
@@ -807,7 +807,7 @@ export const packages = {
     ],
 
     compare: {
-        title: "Compare hosting packages",
+        title: "Compare Packages",
         description: "A quick overview of what changes between hosting tiers. Everything listed in “Included With Every Hosting Package” applies to all plans.",
         scopeOrder: [
             "Coverage",
@@ -985,7 +985,7 @@ export const packages = {
     ],
 
     compare: {
-        title: "Compare automation packages",
+        title: "Compare Packages",
         description: "A simple overview of how automation complexity increases across tiers. Every package includes responsible design and human oversight.",
         scopeOrder: [
             "Workflows",
