@@ -23,7 +23,7 @@ export function ServiceSection({ data }) {
           href={`/services/${slug}`}
           className="group block rounded-2xl p-6 transition hover:bg-slate-50"
         >
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="flex flex-col items-center lg:flex-row gap-8">
             {/* Text */}
             <div className="flex-1">
               <div className="flex items-center justify-between gap-4">

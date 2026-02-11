@@ -1,3 +1,4 @@
+// NavLink.jsx
 "use client";
 
 import clsx from "clsx";
@@ -5,7 +6,7 @@ import Link from "next/link";
 import { isActivePath } from "@/lib/nav";
 import { usePathname } from "next/navigation";
 
-// variant == "desktop" | "mobile" | "dropdown"
+// variant == "desktop" | "mobile"
 export function NavLink({
   href,
   children,
@@ -18,29 +19,14 @@ export function NavLink({
   const active = isActivePath(pathname, href);
 
   const styles = {
-    desktop: clsx(
-      isScrolled ? "text-black" : "text-white", "hover:underline transition underline-offset-6",
-      active && "font-semibold underline"
-    ),
-    mobile: clsx(
-      "text-gray-800 hover:text-purple-600 transition",
-      active && "font-semibold text-purple-600"
-    ),
-    dropdown: clsx(
-      "block px-4 py-2 text-sm text-gray-800 hover:bg-gray-50",
-      active && "font-semibold text-purple-600"
-    ),
+    desktop: clsx( isScrolled ? "text-black" : "text-white", "transition", active && "font-semibold underline underline-offset-6"),
+    mobile: clsx( "text-gray-800 transition", "hover:text-purple-600", active && "font-semibold text-purple-600" )
   };
 
   const base = styles[variant] ?? styles.desktop;
 
   return (
-    <Link
-      href={href}
-      onClick={onClick}
-      aria-current={active ? "page" : undefined}
-      className={clsx(base, className)}
-    >
+    <Link href={href} onClick={onClick} aria-current={active ? "page" : undefined} className={clsx(base, className)}>
       {children}
     </Link>
   );

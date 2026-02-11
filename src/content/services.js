@@ -1,7 +1,7 @@
 
 export const services = {
 	"web-design": {
-		label: "Web Design",
+		label: "Web Development",
 
 		meta: {
 			title: "Expert Web Design Services | Timeless Web",

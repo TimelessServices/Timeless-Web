@@ -35,12 +35,14 @@ export default async function ServicePage({ params }) {
       <ServiceHero title={service.hero.title} description={service.hero.description} 
         serviceSlug={serviceKey} serviceLabel={service.label} />
 
-      <ServiceAudience data={service.audience} />
-      <ServicePoints data={service.points} />
-      <ServicePoints data={service.deliverables} reverse={true} />
-      <ServiceBenefits data={service.benefits} />
-      <ServiceProcess data={service.process} />
-      <ServiceFAQ data={service.faq} />
+      <div className="px-4">
+        <ServiceAudience data={service.audience} />
+        <ServicePoints data={service.points} />
+        <ServicePoints data={service.deliverables} reverse={true} />
+        <ServiceBenefits data={service.benefits} />
+        <ServiceProcess data={service.process} />
+        <ServiceFAQ data={service.faq} />
+      </div>
 
       <div className="bg-slate-50 py-20">
         <div className="container mx-auto px-4 max-w-[1280px]">
