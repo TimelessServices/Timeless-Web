@@ -62,9 +62,7 @@ export function HomeHero() {
 
                 {/* Subheadline */}
                 <p className="text-gray-200 text-lg sm:text-lg md:text-xl max-w-2xl font-normal leading-relaxed mb-12 animate-fade-in-up delay-200">
-                    At Timeless Web, we run your marketing, generate leads, set up your
-                    CRM, track ROI, and train your team creating a complete growth
-                    system that turns clicks into customers.
+                    At Timeless Web, we help you get more clients and grow your business so you never have to worry about your online presence again.
                 </p>
 
                 {/* CTA Button */}
